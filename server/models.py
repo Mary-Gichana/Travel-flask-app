@@ -11,7 +11,7 @@ class User(db.model):
 
     trips = db.relationship('Trip', back_populates='user', cascade='all, delete-orphan')
     destinations = db.relationship('Destination', back_populates='user', cascade='all, delete-orphan')
-    
+
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
 
@@ -25,6 +25,8 @@ class Trip(db.model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     user = db.relationship('User', back_populates='trips')
+    
+
 
     def __repr__(self):
         return f'<Trip {self.name} {self.start_date} {self.end_date}>'
@@ -38,7 +40,9 @@ class Destination(db.model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     user = db.relationship('User', back_populates='destinations')
-
+    
+    trip_destinations = db.relationship('Trip_Destination', back_populates='destination')
+ 
     def __repr__(self):
         return f'<Destination {self.name} {self.description}>'
     
@@ -48,6 +52,8 @@ class Trip_Destination(db.model):
     id = db.Column(db.Integer, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'), nullable=False)
     destination_id = db.Column(db.Integer, db.ForeignKey('destinations.id'), nullable=False)
+
+    
 
 
 
