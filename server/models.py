@@ -22,7 +22,7 @@ class User(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
 
-class Trip(db.Model):
+class Trip(db.Model, SerializerMixin):
     __tablename__ = 'trips'
 
     id = db.Column(db.Integer, primary_key=True)
