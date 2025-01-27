@@ -23,7 +23,7 @@ class Home(Resource):
 
 api.add_resource(Home, '/')
 
-class User(Resource):
+class UserResource(Resource):
     def get(self):
         return make_response([user.to_dict() for user in User.query.all()], 200)
     def post(self):
@@ -32,6 +32,8 @@ class User(Resource):
         db.session.add(user)
         db.session.commit()
         return make_response(user.to_dict(), 201)
+    
+api.add_resource(UserResource, '/users')
 
 
 
