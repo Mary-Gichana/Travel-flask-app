@@ -13,7 +13,7 @@ class User(db.Model, SerializerMixin):
     
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True, nullable=False)
+    name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
 
     trips = db.relationship('Trip', back_populates='user', cascade='all, delete-orphan')
