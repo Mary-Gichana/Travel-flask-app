@@ -55,6 +55,7 @@ class Trip_Destination(db.model):
     destination_id = db.Column(db.Integer, db.ForeignKey('destinations.id'), nullable=False)
 
     trip = db.relationship('Trip', back_populates='trip_destinations')
+    destination = db.relationship('Destination', back_populates='trip_destinations')
 
 
 
