@@ -1,9 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
-from date import date
+from datetime import date
+
+
+
 
 db = SQLAlchemy()
 
-class User(db.model):
+class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -16,7 +19,7 @@ class User(db.model):
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
 
-class Trip(db.model):
+class Trip(db.Model):
     __tablename__ = 'trips'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -33,7 +36,7 @@ class Trip(db.model):
     def __repr__(self):
         return f'<Trip {self.name} {self.start_date} {self.end_date}>'
     
-class Destination(db.model):
+class Destination(db.Model):
     __tablename__ = 'destinations'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -48,7 +51,7 @@ class Destination(db.model):
     def __repr__(self):
         return f'<Destination {self.name} {self.description}>'
     
-class Trip_Destination(db.model):
+class Trip_Destination(db.Model):
     __tablename__ = 'trip_destinations'
 
     id = db.Column(db.Integer, primary_key=True)
