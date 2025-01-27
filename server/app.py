@@ -1,4 +1,4 @@
-from flask import Flask, make_response
+from flask import Flask, make_response, request
 from flask_sqlalchemy import SQLAlchemy
 from models import db, User, Trip, Destination, Trip_Destination
 from flask_migrate import Migrate
@@ -26,7 +26,12 @@ api.add_resource(Home, '/')
 class User(Resource):
     def get(self):
         return make_response([user.to_dict() for user in User.query.all()], 200)
-    
+    def post(self):
+        data = request.get_json()
+        user = User(name=data['name'], email=data['email'])
+        db.session.add(user)
+        db.session.commit()
+        return make_response(user.to_dict(), 201)
 
 
 
