@@ -9,6 +9,8 @@ class User(db.model):
     name = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
 
+    trips = db.relationship('Trip', back_populates='user', cascade='all, delete-orphan')
+
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
 
