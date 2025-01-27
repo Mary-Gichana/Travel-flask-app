@@ -21,3 +21,14 @@ class Trip(db.model):
 
     def __repr__(self):
         return f'<Trip {self.name} {self.start_date} {self.end_date}>'
+    
+class Destination(db.model):
+    __tablename__ = 'destinations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=False)
+    trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<Destination {self.name} {self.description}>'
