@@ -18,6 +18,8 @@ class User(db.Model, SerializerMixin):
 
     trips = db.relationship('Trip', back_populates='user', cascade='all, delete-orphan')
     destinations = db.relationship('Destination', back_populates='user', cascade='all, delete-orphan')
+    
+    serialize_rules = ('-trips.user', '-destinations.user')
 
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
@@ -34,7 +36,7 @@ class Trip(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='trips')
     trip_destinations = db.relationship('Trip_Destination', back_populates='trip')
     
-
+    serialize_rules = ('-user.trips',)
 
     def __repr__(self):
         return f'<Trip {self.name} {self.start_date} {self.end_date}>'
@@ -50,6 +52,8 @@ class Destination(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='destinations')
     
     trip_destinations = db.relationship('Trip_Destination', back_populates='destination')
+
+    serialize_rules = ('-user.destinations',)
  
     def __repr__(self):
         return f'<Destination {self.name} {self.description}>'
@@ -64,7 +68,7 @@ class Trip_Destination(db.Model, SerializerMixin):
     trip = db.relationship('Trip', back_populates='trip_destinations')
     destination = db.relationship('Destination', back_populates='trip_destinations')
 
-
+    serialize_rules = ('-trip.trip_destinations', '-destination.trip_destinations')
 
     def __repr__(self):
         return f'<Trip_Destination {self.id}>'
