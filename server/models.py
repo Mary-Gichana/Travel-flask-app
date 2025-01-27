@@ -1,7 +1,7 @@
 from app import db
 
 class User(db.model):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
@@ -9,3 +9,15 @@ class User(db.model):
 
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
+
+class Trip(db.model):
+    __tablename__ = 'trips'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<Trip {self.name} {self.start_date} {self.end_date}>'
