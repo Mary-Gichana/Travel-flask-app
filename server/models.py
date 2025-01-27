@@ -36,6 +36,8 @@ class Destination(db.model):
     description = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+    users = db.relationship('User', back_populates='destinations')
+
     def __repr__(self):
         return f'<Destination {self.name} {self.description}>'
     
