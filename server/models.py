@@ -23,6 +23,8 @@ class Trip(db.model):
     end_date = db.Column(db.Date, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+    users = db.relationship('User', back_populates='trips')
+
     def __repr__(self):
         return f'<Trip {self.name} {self.start_date} {self.end_date}>'
     
