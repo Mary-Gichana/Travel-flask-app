@@ -7,8 +7,10 @@ from datetime import date
 
 db = SQLAlchemy()
 
-class User(db.Model):
+class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
+
+    
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
