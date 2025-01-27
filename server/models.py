@@ -32,3 +32,10 @@ class Destination(db.model):
 
     def __repr__(self):
         return f'<Destination {self.name} {self.description}>'
+    
+class Trip_Destination(db.model):
+    __tablename__ = 'trip_destinations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'), nullable=False)
+    destination_id = db.Column(db.Integer, db.ForeignKey('destinations.id'), nullable=False)
