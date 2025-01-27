@@ -39,7 +39,7 @@ class Trip(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Trip {self.name} {self.start_date} {self.end_date}>'
     
-class Destination(db.Model):
+class Destination(db.Model, SerializerMixin):
     __tablename__ = 'destinations'
 
     id = db.Column(db.Integer, primary_key=True)
