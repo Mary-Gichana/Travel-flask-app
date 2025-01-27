@@ -25,6 +25,7 @@ class Trip(db.model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     user = db.relationship('User', back_populates='trips')
+    trip_destinations = db.relationship('Trip_Destination', back_populates='trip')
     
 
 
