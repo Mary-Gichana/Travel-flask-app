@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
-from datetime import date
+
+
 
 
 
@@ -33,10 +34,13 @@ class Trip(db.Model, SerializerMixin):
     end_date = db.Column(db.Date, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+    
+
     user = db.relationship('User', back_populates='trips')
     trip_destinations = db.relationship('Trip_Destination', back_populates='trip')
     
-    serialize_rules = ('-user.trips',)
+    serialize_rules = ('-user.trips', '-user.destinations')
+
 
     def __repr__(self):
         return f'<Trip {self.name} {self.start_date} {self.end_date}>'
@@ -53,8 +57,8 @@ class Destination(db.Model, SerializerMixin):
     
     trip_destinations = db.relationship('Trip_Destination', back_populates='destination')
 
-    serialize_rules = ('-user.destinations',)
- 
+    serialize_rules = ('-user.trips', '-user.destinations', '-trip_destinations.destination')
+
     def __repr__(self):
         return f'<Destination {self.name} {self.description}>'
     
