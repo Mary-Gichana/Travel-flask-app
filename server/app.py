@@ -46,6 +46,17 @@ class TripResource(Resource):
         return make_response(trip.to_dict(), 201)
 api.add_resource(TripResource, '/trips')
 
+class DestinationResource(Resource):
+    def get(self):
+        return make_response([destination.to_dict() for destination in Destination.query.all()], 200)
+    def post(self):
+        data = request.get_json()
+        destination = Destination(name=data['name'], description=data['description'])
+        db.session.add(destination)
+        db.session.commit()
+        return make_response(destination.to_dict(), 201)
+api.add_resource(DestinationResource, '/destinations')
+
 
 
 if __name__ == '__main__':
