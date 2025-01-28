@@ -19,7 +19,7 @@ api = Api(app)
 
 class Home(Resource):
     def get(self):
-        return {'Welcome to the travel app!'}
+        return {'message': 'Welcome to the travel app!'}
 
 api.add_resource(Home, '/')
 
@@ -34,6 +34,17 @@ class UserResource(Resource):
         return make_response(user.to_dict(), 201)
     
 api.add_resource(UserResource, '/users')
+
+class TripResource(Resource):
+    def get(self):
+        return make_response([trip.to_dict() for trip in Trip.query.all()], 200)
+    def post(self):
+        data = request.get_json()
+        trip = Trip(name=data['name'], start_date=data['start_date'], end_date=data['end_date'])
+        db.session.add(trip)
+        db.session.commit()
+        return make_response(trip.to_dict(), 201)
+api.add_resource(TripResource, '/trips')
 
 
 
