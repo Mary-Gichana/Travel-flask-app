@@ -39,8 +39,7 @@ class Trip(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='trips')
     trip_destinations = db.relationship('Trip_Destination', back_populates='trip')
     
-    serialize_rules = ('-user.trips', '-user.destinations')
-
+    serialize_rules = ('-user.trips', '-user.destinations', '-trip_destinations.trip')
 
     def __repr__(self):
         return f'<Trip {self.name} {self.start_date} {self.end_date}>'
