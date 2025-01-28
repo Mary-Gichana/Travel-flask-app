@@ -83,11 +83,41 @@ class DestinationResource(Resource):
         return make_response([destination.to_dict() for destination in Destination.query.all()], 200)
     def post(self):
         data = request.get_json()
-        destination = Destination(name=data['name'], description=data['description'])
+        destination = Destination(name=data['name'], description=data['description'], user_id=data['user_id'])
         db.session.add(destination)
         db.session.commit()
         return make_response(destination.to_dict(), 201)
 api.add_resource(DestinationResource, '/destinations')
+
+class DestinationbyIDResource(Resource):
+    def get(self, id):
+        destination = Destination.query.get(id)
+        if destination:
+            return make_response(destination.to_dict(), 200)
+        return make_response({'error': 'destination not found'}, 404)
+    def patch(self, id):
+        destination = Destination.query.get(id)
+        if destination:
+            data = request.get_json()
+            destination.name = data['name']
+            destination.description = data['description']
+            destination.user_id = data['user_id']
+            db.session.commit()
+            return make_response(destination.to_dict(), 200)
+        return make_response({'error': 'destination not found'}, 404)
+    def delete(self, id):
+        destination = Destination.query.get(id)
+        if destination:
+            db.session.delete(destination)
+            db.session.commit()
+            return make_response({'message': 'destination deleted'}, 200)
+        return make_response({'error': 'destination not found'}, 404)
+api.add_resource(DestinationbyIDResource, '/destinations/<int:id>')
+
+
+
+
+
 
 
 class TripDestinationResource(Resource):
