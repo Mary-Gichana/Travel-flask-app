@@ -35,16 +35,48 @@ class UserResource(Resource):
     
 api.add_resource(UserResource, '/users')
 
+class UserbyIDResource(Resource):
+    def get(self, id):
+        user = User.query.get(id)
+        if user:
+            return make_response(user.to_dict(), 200)
+        return make_response({'error': 'user not found'}, 404)
+    def patch(self, id):
+        user = User.query.get(id)
+        if user:
+            data = request.get_json()
+            user.name = data['name']
+            user.email = data['email']
+            db.session.commit()
+            return make_response(user.to_dict(), 200)
+        return make_response({'error': 'user not found'}, 404)
+    def delete(self, id):
+        user = User.query.get(id)
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            return make_response({'message': 'user deleted'}, 200)
+        return make_response({'error': 'user not found'}, 404)  
+
+api.add_resource(UserbyIDResource, '/users/<int:id>')
+
+
+
+
+
 class TripResource(Resource):
     def get(self):
         return make_response([trip.to_dict() for trip in Trip.query.all()], 200)
     def post(self):
         data = request.get_json()
-        trip = Trip(name=data['name'], start_date=data['start_date'], end_date=data['end_date'])
+        trip = Trip(name=data['name'], start_date=data['start_date'], end_date=data['end_date'], user_id=data['user_id'])
         db.session.add(trip)
         db.session.commit()
         return make_response(trip.to_dict(), 201)
 api.add_resource(TripResource, '/trips')
+
+
+
 
 class DestinationResource(Resource):
     def get(self):
@@ -56,6 +88,7 @@ class DestinationResource(Resource):
         db.session.commit()
         return make_response(destination.to_dict(), 201)
 api.add_resource(DestinationResource, '/destinations')
+
 
 class TripDestinationResource(Resource):
     def get(self):
