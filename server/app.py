@@ -1,13 +1,15 @@
 from flask import Flask, make_response, request
 from flask_sqlalchemy import SQLAlchemy
 from models import db, User, Trip, Destination, Trip_Destination
+from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 
-from datetime import date
+from datetime import datetime
 
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///travel.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -69,11 +71,27 @@ class TripResource(Resource):
         return make_response([trip.to_dict() for trip in Trip.query.all()], 200)
     def post(self):
         data = request.get_json()
-        trip = Trip(name=data['name'], start_date=data['start_date'], end_date=data['end_date'], user_id=data['user_id'])
+
+        try:
+            # Convert string dates to Python date objects
+            start_date = datetime.strptime(data['start_date'], "%Y-%m-%d").date()
+            end_date = datetime.strptime(data['end_date'], "%Y-%m-%d").date()
+        except ValueError:
+            return make_response({"error": "Invalid date format. Use YYYY-MM-DD."}, 400)
+
+        # Create a new Trip instance with converted dates
+        trip = Trip(
+            name=data['name'], 
+            start_date=start_date, 
+            end_date=end_date, 
+            user_id=data['user_id']
+        )
         db.session.add(trip)
         db.session.commit()
         return make_response(trip.to_dict(), 201)
+
 api.add_resource(TripResource, '/trips')
+
 
 
 
@@ -130,6 +148,23 @@ class TripDestinationResource(Resource):
         db.session.commit()
         return make_response(trip_destination.to_dict(), 201)
 api.add_resource(TripDestinationResource, '/trip_destinations')
+
+class TripDestinationbyIDResource(Resource):
+    def get(self, id):
+        trip_destination = Trip_Destination.query.get(id)
+        if trip_destination:
+            return make_response(trip_destination.to_dict(), 200)
+        return make_response({'error': 'trip_destination not found'}, 404)
+    def delete(self, id):
+        trip_destination = Trip_Destination.query.get(id)
+        if trip_destination:
+            db.session.delete(trip_destination)
+            db.session.commit()
+            return make_response({'message': 'trip_destination deleted'}, 200)
+        return make_response({'error': 'trip_destination not found'}, 404)
+api.add_resource(TripDestinationbyIDResource, '/trip_destinations/<int:id>')
+
+
 
 
 
