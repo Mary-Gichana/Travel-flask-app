@@ -60,6 +60,12 @@ class Trip(db.Model, SerializerMixin):
             raise ValueError('Start date must be before end date')
         return start_date
     
+    @validates('end_date')
+    def validate_end_date(self, key, end_date): 
+        if end_date < self.start_date:
+            raise ValueError('End date must be after start date')
+        return end_date
+    
 
     user = db.relationship('User', back_populates='trips')
     trip_destinations = db.relationship('Trip_Destination', back_populates='trip')
