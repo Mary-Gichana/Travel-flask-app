@@ -88,6 +88,12 @@ class Destination(db.Model, SerializerMixin):
         if not name.strip():
             raise ValueError('Name can not be empty')
         return name
+    
+    @validates('description')
+    def validate_description(self, key, description): 
+        if not description.strip():
+            raise ValueError('Description can not be empty')
+        return description
 
     user = db.relationship('User', back_populates='destinations')
     
