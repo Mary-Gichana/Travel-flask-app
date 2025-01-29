@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy.orm import validates
 
 
 
@@ -20,8 +21,8 @@ class User(db.Model, SerializerMixin):
     trips = db.relationship('Trip', back_populates='user', cascade='all, delete-orphan')
     destinations = db.relationship('Destination', back_populates='user', cascade='all, delete-orphan')
     
-    serialize_rules = ('-trips.user', '-destinations.user')
-
+    serialize_rules = ('-trips', '-destinations')
+    
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
 
