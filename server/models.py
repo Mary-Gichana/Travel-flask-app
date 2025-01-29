@@ -83,6 +83,12 @@ class Destination(db.Model, SerializerMixin):
     description = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+    @validates('name')
+    def validate_name(self, key, name): 
+        if not name.strip():
+            raise ValueError('Name can not be empty')
+        return name
+
     user = db.relationship('User', back_populates='destinations')
     
     trip_destinations = db.relationship('Trip_Destination', back_populates='destination')
