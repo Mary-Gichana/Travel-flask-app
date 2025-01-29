@@ -53,6 +53,13 @@ class Trip(db.Model, SerializerMixin):
         if not name.strip():
             raise ValueError('Name can not be empty')
         return name
+    
+    @validates('start_date')
+    def validate_start_date(self, key, start_date): 
+        if start_date > self.end_date:
+            raise ValueError('Start date must be before end date')
+        return start_date
+    
 
     user = db.relationship('User', back_populates='trips')
     trip_destinations = db.relationship('Trip_Destination', back_populates='trip')
