@@ -29,6 +29,13 @@ class User(db.Model, SerializerMixin):
             raise ValueError('Name can not be empty')
         return name
     
+    @validates('email')
+    def validate_email(self, key, email): 
+        if not email.strip():
+            raise ValueError('Email can not be empty')
+        if '@' not in email:
+            raise ValueError('Email is invalid')
+        return email
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
 
