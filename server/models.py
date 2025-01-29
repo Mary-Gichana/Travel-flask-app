@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
+from datetime import date
 
 
 
@@ -56,13 +57,13 @@ class Trip(db.Model, SerializerMixin):
     
     @validates('start_date')
     def validate_start_date(self, key, start_date): 
-        if start_date > self.end_date:
+        if self.end_date and start_date > self.end_date:
             raise ValueError('Start date must be before end date')
-        return start_date
+        return start_date 
     
     @validates('end_date')
     def validate_end_date(self, key, end_date): 
-        if end_date < self.start_date:
+        if self.start_date and end_date < self.start_date:
             raise ValueError('End date must be after start date')
         return end_date
     
