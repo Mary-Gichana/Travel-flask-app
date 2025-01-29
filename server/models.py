@@ -22,6 +22,12 @@ class User(db.Model, SerializerMixin):
     destinations = db.relationship('Destination', back_populates='user', cascade='all, delete-orphan')
     
     serialize_rules = ('-trips', '-destinations')
+
+    @validates('name')
+    def validate_name(self, key, name): 
+        if not name.strip():
+            raise ValueError('Name can not be empty')
+        return name
     
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
